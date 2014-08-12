@@ -52,8 +52,7 @@ function init() {
   object.position.set(-200, 0, 200)
   scene.add(object)
 
-
-  renderer = new THREE.WebGLRenderer({antialias: true})
+  renderer = new THREE.CanvasRenderer()
   renderer.setSize(window.innerWidth, window.innerHeight)
   renderer.sortObjects = false
 
