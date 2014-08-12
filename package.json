@@ -1,0 +1,12 @@
+{
+  "name": "bowery-logo",
+  "version": "0.1.0",
+  "description": "bowery logo generator",
+  "scripts": {
+    "start": "./node_modules/serve/bin/serve --port $PORT"
+  },
+  "dependencies": {
+    "serve": "*"
+  },
+  "author": "David Byrd <byrd@bowery.io>"
+}
