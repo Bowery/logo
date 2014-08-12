@@ -2,10 +2,9 @@
 # Bowery Logo
 This repository contains the code to generate instances of Bowery's logo.
 
-## Usage
-Click on index.html or go to
+Click and drag to move around. Scroll to Zoom. Refresh to regenerate.
 
-## TODO
+I'm currently working on the ability to:
 - Choose Color
 - Choose # of points
 - Smooth (sub-pixel) lines
