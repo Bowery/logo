@@ -55,10 +55,21 @@ function init() {
   renderer = new THREE.CanvasRenderer()
   renderer.setSize(window.innerWidth, window.innerHeight)
   renderer.sortObjects = false
+  renderer.setClearColorHex(0x000000, 1)
 
   container.appendChild(renderer.domElement)
 
   window.addEventListener('resize', onWindowResize, false)
+
+  // Download on 'ENTER' key
+  window.addEventListener('keydown', function (e) {
+    var code = e.keyCode || e.which
+    if (code == 13) {
+      var el = document.getElementById('dl')
+      el.href = document.getElementsByTagName('canvas')[0].toDataURL('image/png')
+      el.click()
+    }
+  }, false)
 }
 
 function onWindowResize() {
