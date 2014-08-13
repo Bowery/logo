@@ -59,6 +59,16 @@ function init() {
   container.appendChild(renderer.domElement)
 
   window.addEventListener('resize', onWindowResize, false)
+
+  // Download on 'ENTER' key
+  window.addEventListener('keydown', function (e) {
+    var code = e.keyCode || e.which
+    if (code == 13) {
+      var el = document.getElementById('dl')
+      el.href = document.getElementsByTagName('canvas')[0].toDataURL('image/png')
+      el.click()
+    }
+  }, false)
 }
 
 function onWindowResize() {
