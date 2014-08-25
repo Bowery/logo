@@ -1,0 +1,24 @@
+{
+  "convertHtml": {
+    "relativePaths": false
+  },
+  "customRubyPath": null,
+  "debug": false,
+  "followLeader": true,
+  "lintScripts": false,
+  "preprocessorLocations": [
+    "."
+  ],
+  "preprocessorScriptOutput": "scripts",
+  "preprocessorStyleOutput": "css",
+  "projectDescription": "A simple empty boilerplate for a fresh start",
+  "projectName": "logo",
+  "publishedId": null,
+  "serverHostname": "10.191.17.161",
+  "serverPort": null,
+  "templateDefaultLayout": "layout",
+  "templateDefaultPage": "index",
+  "templateDirectory": "templates",
+  "type": "mixture",
+  "useCompass": false
+}

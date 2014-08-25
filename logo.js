@@ -18,8 +18,8 @@ function init() {
   camera.position.z = 800
 
   controls = new THREE.TrackballControls(camera)
-  controls.rotateSpeed = 1.0
-  controls.zoomSpped = 1.2
+  controls.rotateSpeed = 1.2
+  controls.zoomSpeed = 1.2
   controls.panSpeed = 0.8
   controls.noZoom = false
   controls.noPan = false
@@ -49,7 +49,7 @@ function init() {
 
   var geo = new THREE.ConvexGeometry(points)
   object = THREE.SceneUtils.createMultiMaterialObject(geo, materials)
-  object.position.set(-200, 0, 200)
+  object.position.set(0, 0, 0)
   scene.add(object)
 
   renderer = new THREE.CanvasRenderer()
