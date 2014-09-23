@@ -1,13 +1,181 @@
 <!doctype html>
 <html>
-<head>
+  <head>
+    <script src="svg.js"></script>
+  </head>
+  <body>
+    <div id="logo"></div>
+    <script>
+    /*
+      Create a triangle and then generate another point that's not in the triangle,
 
-</head>
-<body style="margin: 0; padding: 0;">
-  <a id="dl" download="logo.png" style="display: none;">Download Logo</a>
-  <script src="http://threejs.org/build/three.min.js" charset="utf-8"></script>
-  <script src="/convex.js"></script>
-  <script src="/controls.js"></script>
-  <script src="/logo.js"></script>
-</body>
+    */
+    var size = 50
+    var numTriangles = 1
+    var logo = SVG('logo').size(size, size)
+
+    var distance = function (p1, p2) {
+      // Pythagorean Swag
+      var x1 = p1[0]
+      var x2 = p2[0]
+
+      var y1 = p1[1]
+      var y2 = p2[1]
+
+      return Math.sqrt(((x2-x1)*(x2-x1)) + ((y2-y1)*(y2-y1)))
+    }
+
+    var inTriangle = function (triangle, point) {
+      var x = point[0]
+      var y = point[1]
+
+      var x1 = triangle[0][0]
+      var y1 = triangle[0][1]
+
+      var x2 = triangle[1][0]
+      var y2 = triangle[1][1]
+
+      var x3 = triangle[2][0]
+      var y3 = triangle[2][1]
+
+      var dot1 = (y2-y1)*(x-x1)+(-x2+x1)*(y-y1)
+      var dot2 = (y3-y2)*(x-x2)+(-x3+x2)*(y-y2)
+      var dot3 = (y1-y3)*(x-x3)+(-x1+x3)*(y-y3)
+
+      return dot1 >= 0 && dot2 >= 0 && dot3 >= 0
+    }
+
+    var inTriangles = function (triangles, point) {
+      console.log('$$$ inTriangles triangles, point', triangles)
+      for (var i = 0, t; t = triangles[i]; i++)
+        if (inTriangle(t, point)) return true
+
+      return false
+    }
+
+    var linesInTriangle = function (tri) {
+      return [
+        [tri[0], tri[1]],
+        [tri[0], tri[2]],
+        [tri[1], tri[2]]
+      ]
+    }
+
+    var hasAnyIntersection = function (lines, line) {
+      for (var i = 0, l; l = lines[i]; i++)
+        if (linesIntersect(l, line)) return true
+
+      return false
+    }
+
+    var linesIntersect = function (line1, line2) {
+      var x1 = line1[0][0]
+      var y1 = line1[0][1]
+
+      var x2 = line1[1][0]
+      var y2 = line1[1][1]
+
+      var x3 = line2[0][0]
+      var y3 = line2[0][1]
+
+      var x4 = line2[1][0]
+      var y4 = line2[1][1]
+
+      var x=((x1*y2-y1*x2)*(x3-x4)-(x1-x2)*(x3*y4-y3*x4))/((x1-x2)*(y3-y4)-(y1-y2)*(x3-x4));
+      var y=((x1*y2-y1*x2)*(y3-y4)-(y1-y2)*(x3*y4-y3*x4))/((x1-x2)*(y3-y4)-(y1-y2)*(x3-x4));
+      if (isNaN(x)||isNaN(y)) {
+          return false;
+      } else {
+          if (x1>=x2) {
+              if (!(x2<=x&&x<=x1)) {return false;}
+          } else {
+              if (!(x1<=x&&x<=x2)) {return false;}
+          }
+          if (y1>=y2) {
+              if (!(y2<=y&&y<=y1)) {return false;}
+          } else {
+              if (!(y1<=y&&y<=y2)) {return false;}
+          }
+          if (x3>=x4) {
+              if (!(x4<=x&&x<=x3)) {return false;}
+          } else {
+              if (!(x3<=x&&x<=x4)) {return false;}
+          }
+          if (y3>=y4) {
+              if (!(y4<=y&&y<=y3)) {return false;}
+          } else {
+              if (!(y3<=y&&y<=y4)) {return false;}
+          }
+      }
+      return true;
+  }
+
+    var randPoint = function () {
+      return [[Math.random() * size], [Math.random() * size]]
+    }
+
+    var randTriangle = function () {
+      // make sure no points are < 5px apart
+      var point1 = randPoint()
+      var point2 = randPoint()
+      var d = distance(point1, point2)
+      console.log(d, '$$$')
+      while (d < 10 && (d = distance(point1, point2))) {
+        point2 = randPoint()
+      }
+
+      do {
+        var point3 = randPoint()
+        var d1 = distance(point1, point3)
+        var d2 = distance(point2, point3)
+        console.log('point3', point3)
+      } while (d1 < 10 || d2 < 10);
+
+      return [point1, point2, point3]
+    }
+
+    var firstTri = randTriangle()
+    var triangles = [firstTri]
+    var lines = linesInTriangle(firstTri)
+    logo.polygon(firstTri).fill('none').stroke({ width: 1 })
+
+    // For num triangles generate a random point, if its not in an existing triangle create a triangle from it and two existing points
+
+
+    var point
+    for (var i = 0; i < numTriangles ; i++) {
+      while(inTriangles(triangles, point = randPoint()));
+
+      var allPoints = []
+      triangles.forEach(function (points) {
+        points.forEach(function (p) {
+          allPoints.push(p)
+        })
+      })
+
+      var reusablePoints = allPoints.sort(function (p) {return distance(p, point)})
+
+      // for all reusable points, if resuablePoint & generated point intersect
+      // any of the lines in all of the triangles then throw out the reusable
+      // point and try a new one
+      var reusable1, reusable2
+
+      // get reusable1
+      while ((reusable1 = reusablePoints.pop()) && !hasAnyIntersection(lines, reusable1));
+      lines.push([reusable1, point])
+
+      while((reusable2 = reusablePoints.pop()) && !hasAnyIntersection(lines, reusable2));
+      lines.push([reusable2, point])
+
+      lines.push([reusable1, reusable2])
+      var newTri = [reusable1, reusable2, point]
+      triangles.push(newTri)
+    }
+
+    triangles.forEach(function (tri) {
+      logo.polygon(tri).fill('none').stroke({ width: 1 })
+    })
+
+    </script>
+  </body>
 </html>

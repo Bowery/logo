@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+  <head>
+    <script src="svg.js"></script>
+  </head>
+  <body>
+    <div id="logo"></div>
+    <script>
+    var size = 50
+    var numDots = 10
+    var logo = SVG('logo').size(size, size)
+
+    var circle = logo.circle(50).fill('none').stroke({width: 1})
+
+    var distance = function (p1, p2) {
+      // Pythagorean Swag
+      var x1 = p1[0]
+      var x2 = p2[0]
+
+      var y1 = p1[1]
+      var y2 = p2[1]
+
+      return Math.sqrt(((x2-x1)*(x2-x1)) + ((y2-y1)*(y2-y1)))
+    }
+
+    var points = []
+    for (var i = 0; i < numDots; i++) {
+      // var radius = size/2
+      // var x = Math.random() * size
+      // var ylim = Math.sqrt(radius * radius - x * x)
+      // var y = Math.random() * 2 * ylim - ylim
+
+      var t = 2 * Math.PI * Math.random()
+      var u = Math.random() * Math.random()
+      if (u > 1) {
+        var r = 2 - u
+      } else {
+        var r = u
+      }
+      var x = 35 * r * Math.cos(t) + 25
+      var y = 35 * r * Math.sin(t) + 25
+      points.push([x, y])
+      // var line = logo.line(x + 1, y + 1, x, y).stroke({width: 1})
+    }
+
+    points.sort(function (a) {return -distance(a, [25, 25])})
+    logo.polygon(points.slice(0, 5)).fill('none').stroke({width: 1})
+
+    </script>
+  </body>
+</html>
