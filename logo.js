@@ -14,8 +14,8 @@ function init() {
   document.body.appendChild(container)
 
   camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 2000)
-  camera.position.y = 400
-  camera.position.z = 800
+  camera.position.y = 100
+  camera.position.z = 200
 
   controls = new THREE.TrackballControls(camera)
   controls.rotateSpeed = 1.2
@@ -66,7 +66,7 @@ function init() {
     var code = e.keyCode || e.which
     if (code == 13) {
       var el = document.getElementById('dl')
-      el.href = document.getElementsByTagName('canvas')[0].toDataURL('image/png')
+      el.href = document.getElementsByTagName('canvas')[0].toDataURL('image/gif')
       el.click()
     }
   }, false)
